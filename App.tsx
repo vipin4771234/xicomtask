@@ -12,11 +12,14 @@ const App = () => {
     <SafeAreaProvider>
       <SafeAreaInsetsContext.Consumer>
         {insets => (
-          <View style={{flex: 1, paddingTop: insets?.top}}>
-            <StatusBar backgroundColor={'#50048A'} />
-            <RootNavigator />
-            <Toast/>
-          </View>
+          <>
+            <View style={{backgroundColor:'#50048A', height: insets?.top}} />
+            <View style={{flex: 1, paddingBottom: insets?.bottom}}>
+              <StatusBar backgroundColor={'#50048A'} />
+              <RootNavigator />
+              <Toast />
+            </View>
+          </>
         )}
       </SafeAreaInsetsContext.Consumer>
     </SafeAreaProvider>
