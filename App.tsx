@@ -5,6 +5,7 @@ import {
   SafeAreaProvider,
 } from 'react-native-safe-area-context';
 import {View} from 'react-native';
+import Toast from 'react-native-toast-message';
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         {insets => (
           <View style={{flex: 1, paddingTop: insets?.top}}>
             <RootNavigator />
+            <Toast/>
           </View>
         )}
       </SafeAreaInsetsContext.Consumer>

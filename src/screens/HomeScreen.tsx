@@ -6,6 +6,7 @@ import {
   Pressable,
   ToastAndroid,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -23,10 +24,12 @@ const HomeScreen = () => {
   const [images, setImages] = useState<Array<Images> | null>(null);
   const [page, setPage] = useState(0);
   const [messsage, setMesssage] = useState('No Images Found');
+  const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const getData = async () => {
     try {
+      setLoading(true);
       const formData = new FormData();
       formData.append('user_id', '108');
       formData.append('offset', page.toString());
@@ -49,13 +52,15 @@ const HomeScreen = () => {
         if (images && images.length > 0) {
           latestdata = [...images, ...newData];
         }
-        console.log(latestdata)
+        console.log(latestdata);
         setImages(latestdata ? latestdata : newData);
       } else {
         setImages([]);
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -90,12 +95,16 @@ const HomeScreen = () => {
             <Pressable
               onPress={() => setPage(page + 1)}
               style={styles.loadMore}>
-              <Text>Click here to load more</Text>
+              {loading ? (
+                <ActivityIndicator size={'small'} color={'fff'} />
+              ) : (
+                <Text>Click here to load more</Text>
+              )}
             </Pressable>
           }
         />
       ) : (
-        <Text>{messsage}</Text>
+        <Text style={{alignSelf: 'center',justifyContent: 'center', marginTop: scale(30)}}>{messsage}</Text>
       )}
     </View>
   );

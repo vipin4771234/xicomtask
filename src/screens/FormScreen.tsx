@@ -1,10 +1,18 @@
-import {View, Text, ScrollView, Pressable, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  Pressable,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import React, {useState} from 'react';
 import DynamicImage from '../components/DynamicImage';
 import {scale} from '../utils/mixins';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import axios from 'axios';
 import CustomInput from '../components/CustomInput';
+import Toast from 'react-native-toast-message';
 import {
   emailValidation,
   firstNameValidation,
@@ -14,6 +22,7 @@ import {
 
 const FormScreen = ({route}: any) => {
   const {source} = route.params;
+  const [loading, setLoading] = useState(false);
   const [formFields, setFormFields] = useState({
     firstName: '',
     lastName: '',
@@ -67,6 +76,7 @@ const FormScreen = ({route}: any) => {
     console.log(validate());
     if (!validate()) return;
     try {
+      setLoading(true);
       const base64Data = await ReactNativeBlobUtil.fetch('GET', source).then(
         res => res.base64(),
       );
@@ -93,9 +103,24 @@ const FormScreen = ({route}: any) => {
         },
       );
 
-      console.log(response.data);
+      console.log(response?.data);
+      if (response?.data?.status === 'success') {
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: `${response?.data?.message} 👋`,
+        });
+        setFormFields({
+          firstName: '',
+          lastName: '',
+          email: '',
+          phone: '',
+        })
+      }
     } catch (error) {
       console.error('Upload Error:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -139,7 +164,11 @@ const FormScreen = ({route}: any) => {
         }
       />
       <Pressable onPress={onSubmit} style={styles.button}>
-        <Text>Submit</Text>
+        {loading ? (
+          <ActivityIndicator size={'small'} color={'fff'} />
+        ) : (
+          <Text>Submit</Text>
+        )}
       </Pressable>
       <View style={{height: 50, width: '100%'}}></View>
     </ScrollView>
@@ -158,5 +187,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#50048A',
     borderRadius: scale(10),
+    width: '30%',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
 });
