@@ -4,7 +4,7 @@ import {
   SafeAreaInsetsContext,
   SafeAreaProvider,
 } from 'react-native-safe-area-context';
-import {View} from 'react-native';
+import {StatusBar, View} from 'react-native';
 import Toast from 'react-native-toast-message';
 
 const App = () => {
@@ -13,6 +13,7 @@ const App = () => {
       <SafeAreaInsetsContext.Consumer>
         {insets => (
           <View style={{flex: 1, paddingTop: insets?.top}}>
+            <StatusBar backgroundColor={'#50048A'} />
             <RootNavigator />
             <Toast/>
           </View>
