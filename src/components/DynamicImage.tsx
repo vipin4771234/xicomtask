@@ -19,15 +19,17 @@ const DynamicImage = ({
         const aspectRatio = width / height;
         const imageWidth = screenWidth;
         const imageHeight = screenWidth / aspectRatio;
-
+        console.log({source});
         setImageSize({width: imageWidth, height: imageHeight});
       },
       error => {
-        console.log(error);
-        setImageSize({width: 200, height: 100});
+        console.log(error, source);
+        // setImageSize({width: 0, height: 0});
       },
     );
-  }, [source]);
+  }, []);
+
+  if (!imageSize.height && !imageSize.width) return;
 
   return (
     <Pressable
@@ -35,9 +37,12 @@ const DynamicImage = ({
       style={{
         aspectRatio: imageSize.width / imageSize.height || 0,
         paddingBottom: scale(10),
-        borderRadius: scale(5)
+        borderRadius: scale(5),
       }}>
-      <Image source={{uri: source}} style={{width: '100%', height: '100%',borderRadius: scale(5)}} />
+      <Image
+        source={{uri: source}}
+        style={{width: '100%', height: '100%', borderRadius: scale(5)}}
+      />
     </Pressable>
   );
 };

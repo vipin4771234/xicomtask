@@ -25,10 +25,14 @@ const HomeScreen = () => {
   const [page, setPage] = useState(0);
   const [messsage, setMesssage] = useState('No Images Found');
   const [loading, setLoading] = useState(false);
+  const [firstTimeLoading, setFirstTimeLoading] = useState(false);
 
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const getData = async () => {
     try {
+      if (!images || images.length === 0) {
+        setFirstTimeLoading(true);
+      }
       setLoading(true);
       const formData = new FormData();
       formData.append('user_id', '108');
@@ -47,12 +51,12 @@ const HomeScreen = () => {
       console.log(response.data);
       if (response?.data?.images) {
         let newData = response.data?.images;
-        console.log('newData', newData);
+        // console.log('newData', newData);
         let latestdata: any;
         if (images && images.length > 0) {
           latestdata = [...images, ...newData];
         }
-        console.log(latestdata);
+        // console.log(latestdata);
         setImages(latestdata ? latestdata : newData);
       } else {
         setImages([]);
@@ -61,6 +65,7 @@ const HomeScreen = () => {
       console.log(error);
     } finally {
       setLoading(false);
+      setFirstTimeLoading(false);
     }
   };
 
@@ -104,7 +109,20 @@ const HomeScreen = () => {
           }
         />
       ) : (
-        <Text style={{alignSelf: 'center',justifyContent: 'center', marginTop: scale(30)}}>{messsage}</Text>
+        <>
+          {loading ? (
+            <ActivityIndicator size={'large'} color={'fff'} />
+          ) : (
+            <Text
+              style={{
+                alignSelf: 'center',
+                justifyContent: 'center',
+                marginTop: scale(30),
+              }}>
+              {messsage}
+            </Text>
+          )}
+        </>
       )}
     </View>
   );

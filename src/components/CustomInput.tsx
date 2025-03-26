@@ -64,11 +64,14 @@ const styles = StyleSheet.create({
     borderColor: 'lightgray',
     flex: 3,
     paddingHorizontal: scale(10),
+    height: scale(40),
+    color: '#3c3c3c'
   },
   text: {
     fontSize: scale(15),
     paddingRight: scale(10),
     flex: 1,
+    color: '#3c3c3c'
   },
 });
 
